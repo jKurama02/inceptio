@@ -1,0 +1,11 @@
+FROM debian:buster
+
+RUN apt-get update && apt-get install -y mariadb-server && rm -rf /var/lib/apt/lists/*
+
+COPY ./conf /conf
+
+RUN chmod +x /conf/setup.sh
+
+CMD ["bash", "/conf/setup.sh"]
+
+#“Prendimi un sistema Debian pulito. Scarica la lista dei pacchetti. Installa MariaDB. Pulisci tutto. Copia dentro uno script che ho preparato. Rendilo eseguibile. E quando il container parte, avvia quello script che prepara il database.”
