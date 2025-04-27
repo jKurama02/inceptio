@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: ./srcs/nginx/
+    container_name: ngiNX
+    restart: always
+    ports:
+      - "800:80"
+    networks:
+      - inception
+
+#############################################
+  mariadb:
+    build: ./srcs/mariadb
+    container_name: mariaDB
+    restart: always
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - inception
+
+#############################################
+
+  wordpress:
+    build: ./srcs/wordpress
+    container_name: wordpress
+    restart: always
+    environment:
+      - WORDPRESS_DB_HOST=mariaDB:3306
+      - WORDPRESS_DB_NAME=wordpress
+      - WORDPRESS_USER=wpuser
+      - WORDPRESS_PASSWORD=wppassword
+    ports:
+      - "9000:9000"
+    volumes:
+       - wordpress_data:/var/www/html
+    networks:
+      - inception
+
+
+#############################################
+volumes:
+  mariadb_data:
+  wordpress_data:
+
+networks:
+  inception:
+    driver: bridge
+
+
