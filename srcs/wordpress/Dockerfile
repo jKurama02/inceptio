@@ -1,4 +1,4 @@
-FROM alpine:3.20.5
+FROM alpine:3.18
 
 RUN apk update && apk upgrade && apk add --no-cache \
     php82 \
@@ -25,20 +25,26 @@ RUN apk update && apk upgrade && apk add --no-cache \
     curl \
     mariadb-client
 
-RUN adduser -S nginx && addgroup -S nginx
+RUN apk update && apk add --no-cache php82-cli
 
-# file di configurazione di PHP-FPM
-COPY conf/www.conf /etc/php82/php-fpm.d/www.conf
+RUN adduser -S nginx && addgroup -S nginx
+RUN ln -sf /usr/bin/php82 /usr/bin/php
 
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /usr/local/bin/wp
 
-WORKDIR /var/www/html/wordpress
+COPY conf/www.conf /etc/php82/php-fpm.d/www.conf
+RUN mkdir -p /run/php
 
-# file di configurazione di WORDPRESS
 COPY conf/wp-config.sh /usr/local/bin/
-
 RUN chmod +x /usr/local/bin/wp-config.sh
+
+
+WORKDIR /var/www/html
+
+
+# Aggiungi un file di configurazione temporaneo per aumentare il limite di memoria PHP
+RUN echo "memory_limit = 256M" > /etc/php82/conf.d/memory-limit.ini
 
 ENTRYPOINT [ "/bin/sh" , "/usr/local/bin/wp-config.sh"]

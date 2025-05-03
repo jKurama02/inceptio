@@ -3,22 +3,28 @@ version: '3.8'
 services:
   nginx:
     build: ./srcs/nginx/
-    container_name: ngiNX
+    container_name: nginx
     restart: always
     ports:
-      - "800:80"
+      - 443:443
+      - 80:80
     networks:
       - inception
 
 #############################################
   mariadb:
     build: ./srcs/mariadb
-    container_name: mariaDB
+    container_name: mariadb
     restart: always
     volumes:
       - mariadb_data:/var/lib/mysql
     networks:
       - inception
+    env_file:
+            - .env
+    expose:
+      - "3306"
+
 
 #############################################
 
@@ -26,17 +32,14 @@ services:
     build: ./srcs/wordpress
     container_name: wordpress
     restart: always
-    environment:
-      - WORDPRESS_DB_HOST=mariaDB:3306
-      - WORDPRESS_DB_NAME=wordpress
-      - WORDPRESS_USER=wpuser
-      - WORDPRESS_PASSWORD=wppassword
-    ports:
-      - "9000:9000"
+    env_file:
+            - .env
     volumes:
        - wordpress_data:/var/www/html
     networks:
       - inception
+    expose:
+      - "9000"
 
 
 #############################################
