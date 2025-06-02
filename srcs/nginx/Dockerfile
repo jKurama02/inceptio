@@ -1,10 +1,18 @@
 FROM nginx:alpine
 
-COPY setup_nginx.sh /setup_nginx.sh
 COPY html/index.html /usr/share/nginx/html
 COPY my_config/nginx.conf /etc/nginx/nginx.conf
 
-RUN chmod +x /setup_nginx.sh
+# Install openssl
+RUN apk add --no-cache openssl
 
-ENTRYPOINT [ "sh", "setup_nginx.sh" ]
+RUN mkdir -p /etc/nginx/ssl
 
+RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 \
+-nodes \
+-out /etc/nginx/ssl/inception.crt \
+-keyout /etc/nginx/ssl/inception.key \
+-subj "/C=IT/ST=Rome/L=Rome/O=42 School/OU=anmedyns/CN=anmedyns.42.fr/"
+
+
+CMD ["nginx", "-g", "daemon off;"]

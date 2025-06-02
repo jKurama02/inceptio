@@ -10,7 +10,7 @@ sleep 22
 echo "Create wp-config.php..."
 wp config create --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_USER --dbpass=$WORDPRESS_PASSWORD --dbhost=$WORDPRESS_DB_HOST --allow-root
 
-wp core install --url="http://localhost" --title="anmedyns" --admin_user="admin" --admin_password="adminpassword" --admin_email="anmedyns@student.42roma.it" --allow-root
+wp core install --url="http://localhost" --title="anmedyns" --admin_user="the_admin" --admin_password="'${ADMIN_PASSWORD}'" --admin_email="anmedyns@student.42roma.it" --allow-root
 sleep 10
 
 php-fpm82 --nodaemonize
