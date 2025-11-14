@@ -2,18 +2,21 @@ version: '3.8'
 
 services:
   nginx:
-    build: ./srcs/nginx/
+    build: ./nginx/
     container_name: nginx
     restart: always
     ports:
       - 443:443
-      - 80:80
+    volumes:
+      - wordpress_data:/var/www/html
     networks:
       - inception
+    depends_on:
+      - wordpress
 
 #############################################
   mariadb:
-    build: ./srcs/mariadb
+    build: ./mariadb
     container_name: mariadb
     restart: always
     volumes:
@@ -21,7 +24,7 @@ services:
     networks:
       - inception
     env_file:
-            - .env
+            - ../.env
     expose:
       - "3306"
 
@@ -29,15 +32,17 @@ services:
 #############################################
 
   wordpress:
-    build: ./srcs/wordpress
+    build: ./wordpress
     container_name: wordpress
     restart: always
     env_file:
-            - .env
+            - ../.env
     volumes:
        - wordpress_data:/var/www/html
     networks:
       - inception
+    depends_on:
+      - mariadb
     expose:
       - "9000"
 
@@ -52,3 +57,9 @@ networks:
     driver: bridge
 
 
+
+# The volumes is used to :
+# WordPress wite data to /var/www/html
+# Nginx read data from /var/www/html
+# So both containers need to share the same volume
+# mariadb_data is used to persist database data

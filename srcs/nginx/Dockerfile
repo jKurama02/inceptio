@@ -1,10 +1,12 @@
-FROM nginx:alpine
+FROM alpine:3.18
+
+# Install nginx and openssl
+RUN apk update && apk upgrade && apk add --no-cache \
+    nginx \
+    openssl
 
 COPY html/index.html /usr/share/nginx/html
 COPY my_config/nginx.conf /etc/nginx/nginx.conf
-
-# Install openssl
-RUN apk add --no-cache openssl
 
 RUN mkdir -p /etc/nginx/ssl
 

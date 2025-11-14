@@ -11,11 +11,11 @@ mariadb  -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;"
 
 # Create the user if it doesn't exist
 echo "Creating user if it doesn't exist..."
-mariadb  -e "CREATE USER IF NOT EXISTS \`${MYSQL_USER}\`@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';"
+mariadb  -e "CREATE USER IF NOT EXISTS \`${MYSQL_USER}\`@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
 
 # Grant all privileges to the user on the database
 echo "Granting privileges..."
-mariadb  -e "GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO \`${MYSQL_USER}\`@'%' IDENTIFIED BY '${MYSQL_PASSWORD}' WITH GRANT OPTION;"
+mariadb  -e "GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO \`${MYSQL_USER}\`@'%';"
 
 # Change the root user's password
 echo "Changing root user's password..."
