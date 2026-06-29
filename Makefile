@@ -22,7 +22,7 @@ clean: down
 
 fclean: clean
 	@echo "Removing volumes..."
-	docker volume prune -f -y
+	docker volume prune -fa
 
 re: fclean all
 
