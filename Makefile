@@ -4,15 +4,15 @@ all: build up
 
 build:
 	@echo "Building Docker images..."
-	docker-compose -f srcs/docker-compose.yml build
+	docker compose -f srcs/docker-compose.yml build
 
 up:
 	@echo "Starting containers..."
-	docker-compose -f srcs/docker-compose.yml up -d
+	docker compose -f srcs/docker-compose.yml up -d
 
 down:
 	@echo "Stopping containers..."
-	docker-compose -f srcs/docker-compose.yml down
+	docker compose -f srcs/docker-compose.yml down
 
 clean: down
 	@echo "Removing containers and images..."
