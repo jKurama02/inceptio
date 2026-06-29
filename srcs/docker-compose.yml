@@ -20,7 +20,11 @@ services:
     container_name: mariadb
     restart: always
     volumes:
-      - mariadb_data:/var/lib/mysql
+      mariadb_data:/var/lib/mysql:
+        driver__opts:
+          type: none
+          device: /home/anmedyns/data/mariadb
+          o: bind
     networks:
       - inception
     env_file:
@@ -38,7 +42,11 @@ services:
     env_file:
             - ../.env
     volumes:
-       - wordpress_data:/var/www/html
+      wordpress_data:/var/www/html:
+        driver__opts:
+          type: none
+          device: /home/anmedyns/data/wordpress
+          o: bind
     networks:
       - inception
     depends_on:

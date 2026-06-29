@@ -45,13 +45,13 @@ RUN chmod +x /usr/local/bin/wp-config.sh
 WORKDIR /var/www/html
 
 # Copia personalizzazione homepage
-COPY ./custom-homepage.php /tmp/custom-homepage.php
+# COPY ./custom-homepage.php /tmp/custom-homepage.php
 
 # Aggiungi un file di configurazione temporaneo per aumentare il limite di memoria PHP
 RUN echo "memory_limit = 256M" > /etc/php82/conf.d/memory-limit.ini
 
 # Crea directory mu-plugins e copia personalizzazione
 RUN mkdir -p /var/www/html/wp-content/mu-plugins
-COPY ../../custom-homepage.php /var/www/html/wp-content/mu-plugins/
+COPY custom-homepage.php /var/www/html/wp-content/mu-plugins/
 
 ENTRYPOINT ["tini", "--", "/bin/sh" , "/usr/local/bin/wp-config.sh"]
